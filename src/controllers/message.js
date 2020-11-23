@@ -130,8 +130,8 @@ module.exports = {
       const { count, rows } = await Message.findAndCountAll({
         attributes: {
           include: [
-            [Sequelize.fn("COUNT", Sequelize.col("read")), "n_read"]
-          ]
+            [Sequelize.fn("COUNT", Sequelize.col("read")), "n_read"],
+          ],
         },
         include: [
           {
@@ -149,9 +149,12 @@ module.exports = {
               recipient: req.user.id,
             },
           ],
+          read: {
+            [Op.not]: true,
+          },
         },
         group: "sender",
-        order: [["createdAt", "DESC"]],
+        order: [["createdAt", "ASC"]],
         offset: parseInt(offset) || 0,
         limit: parseInt(limit),
       });
@@ -238,13 +241,29 @@ module.exports = {
           },
           sender: {
             [Op.or]: [req.user.id, req.params.id]
-          }
+          },
+          message: {
+            [Op.startsWith]: search,
+          },
         },
         order: [["createdAt", "ASC"]],
         offset: parseInt(offset) || 0,
         limit: parseInt(limit),
       });
       if (rows.length) {
+        await Message.update(
+          { read: 1 },
+          {
+            where: {
+              recipient: {
+                [Op.or]: [req.user.id, req.params.id],
+              },
+              sender: {
+                [Op.or]: [req.user.id, req.params.id],
+              },
+            },
+          }
+        );
         return responseStandart(res, "success display your message", {
           pageInfo: [
             {
@@ -320,11 +339,11 @@ module.exports = {
         ],
       });
       if (results) {
-        return responseStandart(res, "success to display address", { results });
+        return responseStandart(res, "success to display message", { results });
       } else {
         return responseStandart(
           res,
-          "unable to display address",
+          "unable to display message",
           {},
           400,
           false

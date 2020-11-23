@@ -22,3 +22,20 @@ app.get("/", (req, res) => {
 app.listen(APP_PORT, () => {
   console.log(`app listen on port ${APP_PORT}`);
 });
+
+// provide static file
+app.use("/assets/uploads/", express.static("assets/uploads"));
+
+
+const auth = require("./src/routes/auth");
+const profile = require("./src/routes/profile");
+const contact = require("./src/routes/contact");
+const message = require("./src/routes/message");
+
+// attach member router
+app.use("/auth", auth);
+
+const customerAuth = require("./src/middlewares/auth");
+app.use("/profile", customerAuth, profile);
+app.use("/contact", customerAuth, contact);
+app.use("/message", customerAuth, message);

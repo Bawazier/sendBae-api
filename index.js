@@ -28,12 +28,14 @@ app.use("/assets/uploads/", express.static("assets/uploads"));
 
 
 const auth = require("./src/routes/auth");
+const country = require("./src/routes/country");
 const profile = require("./src/routes/profile");
 const contact = require("./src/routes/contact");
 const message = require("./src/routes/message");
 
 // attach member router
 app.use("/auth", auth);
+app.use("/country", country);
 
 const customerAuth = require("./src/middlewares/auth");
 app.use("/profile", customerAuth, profile);

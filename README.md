@@ -3,6 +3,9 @@
 ## routes
 POST auth/
 
+GET country/
+GET country/:ID
+
 GET contact/
 GET contact/:ID
 POST contact/

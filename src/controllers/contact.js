@@ -68,11 +68,11 @@ module.exports = {
         ],
       });
       if (results) {
-        return responseStandart(res, "success to display address", { results });
+        return responseStandart(res, "success to display contact", { results });
       } else {
         return responseStandart(
           res,
-          "unable to display address",
+          "unable to display contact",
           {},
           400,
           false
@@ -105,7 +105,7 @@ module.exports = {
         limit: parseInt(limit),
       });
       if (rows.length) {
-        return responseStandart(res, "success to display address", {
+        return responseStandart(res, "success to display contact", {
           pageInfo: [
             {
               count: count,
@@ -134,7 +134,7 @@ module.exports = {
       } else {
         return responseStandart(
           res,
-          "unable to display address",
+          "unable to display contact",
           {
             pageInfo: [
               {

@@ -22,14 +22,18 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  Message.init({
-    sender: DataTypes.INTEGER,
-    recipient: DataTypes.INTEGER,
-    read: DataTypes.BOOLEAN,
-    message: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: "Message",
-  });
+  Message.init(
+    {
+      sender: DataTypes.INTEGER,
+      recipient: DataTypes.INTEGER,
+      read: DataTypes.BOOLEAN,
+      isLastest: DataTypes.BOOLEAN,
+      message: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: "Message",
+    }
+  );
   return Message;
 };

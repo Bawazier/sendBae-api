@@ -25,9 +25,24 @@ module.exports = {
             sender: req.user.id,
             recipient: req.params.id,
             read: 0,
-            message: body,
+            isLastest: 1,
+            message: body || "photo",
           };
+          await Message.update(
+            { isLastest: 0 },
+            {
+              where: {
+                recipient: {
+                  [Op.or]: [req.user.id, req.params.id],
+                },
+                sender: {
+                  [Op.or]: [req.user.id, req.params.id],
+                },
+              },
+            }
+          );
           const results = await Message.create(dataMessage);
+          console.log(results);
           if (results.dataValues) {
             const dataImage = {
               messageId: results.dataValues.id,
@@ -46,9 +61,24 @@ module.exports = {
             sender: req.user.id,
             recipient: req.params.id,
             read: 0,
+            isLastest: 1,
             message: body,
           };
+          await Message.update(
+            { isLastest: 0 },
+            {
+              where: {
+                recipient: {
+                  [Op.or]: [req.user.id, req.params.id],
+                },
+                sender: {
+                  [Op.or]: [req.user.id, req.params.id],
+                },
+              },
+            }
+          );
           const results = await Message.create(dataMessage);
+          console.log(results);
           if (results.dataValues) {
             return responseStandart(res, "success sender message", {});
           } else {
@@ -103,14 +133,8 @@ module.exports = {
     try {
       const results = await Message.destroy({
         where: {
-          [Op.or]: [
-            {
-              sender: req.user.id,
-            },
-            {
-              recipient: req.user.id,
-            },
-          ],
+          sender: req.user.id,
+          recipient: req.params.id,
         },
       });
       if (results) {
@@ -149,11 +173,8 @@ module.exports = {
               recipient: req.user.id,
             },
           ],
-          read: {
-            [Op.not]: true,
-          },
+          isLastest: true,
         },
-        group: "recipient",
         order: [["createdAt", "ASC"]],
         offset: parseInt(offset) || 0,
         limit: parseInt(limit),
@@ -162,11 +183,11 @@ module.exports = {
         return responseStandart(res, "success to list your message", {
           pageInfo: [
             {
-              count: count.length,
-              pages: Math.ceil(count.length / limit),
+              count: count,
+              pages: Math.ceil(count / limit),
               limit: parseInt(limit),
               nextLink:
-                page <= Math.ceil(count.length / limit)
+                page <= Math.ceil(count / limit)
                   ? process.env.APP_URL +
                     `message/list/?${qs.stringify({
                       ...req.query,
@@ -174,7 +195,7 @@ module.exports = {
                     })}`
                   : null,
               prevLink:
-                page > Math.ceil(count.length / limit)
+                page > Math.ceil(count / limit)
                   ? process.env.APP_URL +
                     `message/list/?${qs.stringify({
                       ...req.query,

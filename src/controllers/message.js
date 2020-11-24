@@ -153,7 +153,7 @@ module.exports = {
             [Op.not]: true,
           },
         },
-        group: "sender",
+        group: "recipient",
         order: [["createdAt", "ASC"]],
         offset: parseInt(offset) || 0,
         limit: parseInt(limit),

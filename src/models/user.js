@@ -15,9 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "countryId"
       });
       User.hasMany(models.Message, {
+        as: "userSender",
         foreignKey: "sender"
       });
       User.hasMany(models.Message, {
+        as: "userRecipient",
         foreignKey: "recipient",
       });
       User.hasMany(models.Contact, {

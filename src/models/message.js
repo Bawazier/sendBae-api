@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "messageId"
       });
       Message.belongsTo(models.User, {
-        as: "sender",
+        as: "userSender",
         foreignKey: "sender"
       });
       Message.belongsTo(models.User, {
-        as: "recipient",
+        as: "userRecipient",
         foreignKey: "recipient",
       });
     }

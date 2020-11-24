@@ -155,7 +155,27 @@ module.exports = {
         include: [
           {
             model: User,
-            attributes: ["id", "username", "firstName", "lastName", "bio", "photo"],
+            as: "userSender",
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
+          },
+          {
+            model: User,
+            as: "userRecipient",
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
           },
           Image,
         ],
@@ -247,6 +267,19 @@ module.exports = {
         include: [
           {
             model: User,
+            as: "userSender",
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
+          },
+          {
+            model: User,
+            as: "userRecipient",
             attributes: [
               "id",
               "username",
@@ -357,6 +390,19 @@ module.exports = {
         include: [
           {
             model: User,
+            as: "userSender",
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
+          },
+          {
+            model: User,
+            as: "userRecipient",
             attributes: [
               "id",
               "username",

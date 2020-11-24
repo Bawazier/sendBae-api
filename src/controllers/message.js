@@ -152,11 +152,6 @@ module.exports = {
       const { page = 1, limit = 10, search = "" } = req.query;
       const offset = (page - 1) * limit;
       const { count, rows } = await Message.findAndCountAll({
-        attributes: {
-          include: [
-            [Sequelize.fn("COUNT", Sequelize.col("read")), "n_read"],
-          ],
-        },
         include: [
           {
             model: User,

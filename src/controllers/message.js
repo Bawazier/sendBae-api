@@ -155,7 +155,7 @@ module.exports = {
         include: [
           {
             model: User,
-            attributes: ["username", "firstName", "lastName", "bio", "photo"],
+            attributes: ["id", "username", "firstName", "lastName", "bio", "photo"],
           },
           Image,
         ],
@@ -247,16 +247,23 @@ module.exports = {
         include: [
           {
             model: User,
-            attributes: ["username", "firstName", "lastName", "bio", "photo"],
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
           },
           Image,
         ],
         where: {
           recipient: {
-            [Op.or]: [req.user.id, req.params.id]
+            [Op.or]: [req.user.id, req.params.id],
           },
           sender: {
-            [Op.or]: [req.user.id, req.params.id]
+            [Op.or]: [req.user.id, req.params.id],
           },
           message: {
             [Op.startsWith]: search,
@@ -350,7 +357,14 @@ module.exports = {
         include: [
           {
             model: User,
-            attributes: ["username", "firstName", "lastName", "bio", "photo"],
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
           },
         ],
       });

@@ -26,13 +26,24 @@ module.exports = {
         results,
       });
     } catch (e) {
-      return responseStandart(
-        res,
-        "cannot display user data",
-        { ValidationError: e.details[0].message, sqlError: e },
-        400,
-        false
-      );
+      return responseStandart(res, e, {}, 400, false);
+    }
+  },
+
+  getUserId: async (req, res) => {
+    try {
+      const data = await User.findByPk(req.params.id, {
+        include: [Country],
+      });
+      const results = data.map((item) => {
+        const photo = { URL_photo: process.env.APP_URL + item.photo };
+        return Object.assign({}, item.dataValues, photo);
+      });
+      return responseStandart(res, "success display user data", {
+        results,
+      });
+    } catch (e) {
+      return responseStandart(res, e, {}, 400, false);
     }
   },
 
@@ -66,13 +77,7 @@ module.exports = {
         );
       }
     } catch (e) {
-      return responseStandart(
-        res,
-        "cannot update user data",
-        { ValidationError: e.details[0].message, sqlError: e },
-        400,
-        false
-      );
+      return responseStandart(res, e, {}, 400, false);
     }
   },
 
@@ -103,13 +108,7 @@ module.exports = {
         });
         return responseStandart(res, "success update user data", {});
       } catch (e) {
-        return responseStandart(
-          res,
-          "cannot update user data",
-          { ValidationError: e.details[0].message, sqlError: e },
-          400,
-          false
-        );
+        return responseStandart(res, e, {}, 400, false);
       }
     });
   },
@@ -141,13 +140,7 @@ module.exports = {
         });
         return responseStandart(res, "success update user data", {});
       } catch (e) {
-        return responseStandart(
-          res,
-          "cannot update user data",
-          { ValidationError: e.details[0].message, sqlError: e },
-          400,
-          false
-        );
+        return responseStandart(res, e, {}, 400, false);
       }
     });
   },

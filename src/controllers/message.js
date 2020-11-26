@@ -1,7 +1,7 @@
 const { Message, Image, User } = require("../models");
 const responseStandart = require("../helpers/response");
 const schema = require("../helpers/validation");
-const { Op, Sequelize } = require("sequelize");
+const { Op } = require("sequelize");
 const multer = require("multer");
 const qs = require("querystring");
 
@@ -188,9 +188,12 @@ module.exports = {
               recipient: req.user.id,
             },
           ],
+          message: {
+            [Op.startsWith]: search,
+          },
           isLastest: true,
         },
-        order: [["createdAt", "ASC"]],
+        order: [["createdAt", "DESC"]],
         offset: parseInt(offset) || 0,
         limit: parseInt(limit),
       });
@@ -302,7 +305,7 @@ module.exports = {
             [Op.startsWith]: search,
           },
         },
-        order: [["createdAt", "ASC"]],
+        order: [["createdAt", "DESC"]],
         offset: parseInt(offset) || 0,
         limit: parseInt(limit),
       });
@@ -311,12 +314,7 @@ module.exports = {
           { read: 1 },
           {
             where: {
-              recipient: {
-                [Op.or]: [req.user.id, req.params.id],
-              },
-              sender: {
-                [Op.or]: [req.user.id, req.params.id],
-              },
+              recipient: req.user.id,
             },
           }
         );

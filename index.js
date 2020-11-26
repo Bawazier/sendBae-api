@@ -6,6 +6,10 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {});
+const socket = require("./src/helpers/socket");
+socket.io = io;
 const { APP_PORT } = process.env;
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,7 +23,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(APP_PORT, () => {
+server.listen(APP_PORT, () => {
   console.log(`app listen on port ${APP_PORT}`);
 });
 

@@ -4,6 +4,7 @@ const schema = require("../helpers/validation");
 const { Op } = require("sequelize");
 const multer = require("multer");
 const qs = require("querystring");
+const socket = require("../helpers/socket");
 
 const options = require("../helpers/upload");
 const upload = options.single("image");
@@ -42,6 +43,7 @@ module.exports = {
             }
           );
           const results = await Message.create(dataMessage);
+          socket.io.emit(dataMessage.recipient, {sender: req.user.id, message: body || "photo" });
           console.log(results);
           if (results.dataValues) {
             const dataImage = {

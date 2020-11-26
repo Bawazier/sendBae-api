@@ -63,7 +63,7 @@ module.exports = {
         include: [
           {
             model: User,
-            attributes: ["username", "firstName", "lastName", "bio", "photo"],
+            attributes: ["id", "username", "firstName", "lastName", "bio", "photo"],
           },
         ],
       });
@@ -91,7 +91,14 @@ module.exports = {
         include: [
           {
             model: User,
-            attributes: ["username", "firstName", "lastName", "bio", "photo"],
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "bio",
+              "photo",
+            ],
           },
         ],
         where: {

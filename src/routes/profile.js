@@ -2,7 +2,7 @@ const router = require("express").Router();
 const profile = require("../controllers/profile");
 
 router.get("/", profile.getUser);
-router.get("/:id", profile.getUserId);
+router.get("/info/:id", profile.getUserId);
 router.patch("/", profile.patchUser);
 router.put("/", profile.putUser);
 

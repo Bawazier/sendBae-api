@@ -43,7 +43,7 @@ module.exports = {
             }
           );
           const results = await Message.create(dataMessage);
-          socket.io.emit(dataMessage.recipient, {sender: req.user.id, message: body || "photo" });
+          socket.io.emit(dataMessage.recipient.toString(), {sender: req.user.id, message: body || "photo" });
           console.log(results);
           if (results.dataValues) {
             const dataImage = {

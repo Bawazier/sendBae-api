@@ -80,8 +80,8 @@ module.exports = {
             }
           );
           const results = await Message.create(dataMessage);
-          socket.io.emit(dataMessage.recipient.toString(), { sender: req.user.id, message: body || "photo" });
-          console.log(dataMessage.recipient.toString(), { sender: req.user.id, message: body || "photo" });
+          socket.io.emit(dataMessage.recipient.toString(), { sender: req.user.id.toString(), message: body || "photo" });
+          console.log(dataMessage.recipient.toString(), { sender: req.user.id.toString(), message: body || "photo" });
           if (results.dataValues) {
             return responseStandart(res, "success sender message", {});
           } else {

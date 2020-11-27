@@ -32,11 +32,7 @@ module.exports = {
 
   getUserId: async (req, res) => {
     try {
-      const data = await User.findByPk(parseInt(req.params.id));
-      const results = data.map((item) => {
-        const photo = { URL_photo: process.env.APP_URL + item.photo };
-        return Object.assign({}, item.dataValues, photo);
-      });
+      const results = await User.findByPk(parseInt(req.params.id));
       return responseStandart(res, "success display user data", {
         results,
       });

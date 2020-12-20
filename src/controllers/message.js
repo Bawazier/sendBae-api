@@ -4,7 +4,7 @@ const schema = require("../helpers/validation");
 const { Op } = require("sequelize");
 const multer = require("multer");
 const qs = require("querystring");
-const socket = require("../helpers/socket");
+const io = require("../../index");
 
 const options = require("../helpers/upload");
 const upload = options.single("image");
@@ -43,8 +43,12 @@ module.exports = {
             }
           );
           const results = await Message.create(dataMessage);
-          socket.io.emit(dataMessage.recipient.toString(), {sender: req.user.id, message: body || "photo" });
-          console.log(dataMessage.recipient.toString(), { sender: req.user.id, message: body || "photo" });
+          const senderData = await User.findByPk(parseInt(req.params.id));
+          io.emit(dataMessage.recipient, {
+            sender: req.user.id,
+            message: body || "photo",
+            senderData,
+          });
           if (results.dataValues) {
             const dataImage = {
               messageId: results.dataValues.id,
@@ -80,8 +84,12 @@ module.exports = {
             }
           );
           const results = await Message.create(dataMessage);
-          socket.io.emit(dataMessage.recipient.toString(), { sender: req.user.id.toString(), message: body || "photo" });
-          console.log(dataMessage.recipient.toString(), { sender: req.user.id.toString(), message: body || "photo" });
+          const senderData = await User.findByPk(parseInt(req.params.id));
+          io.emit(dataMessage.recipient, {
+            sender: req.user.id,
+            message: body || "photo",
+            senderData,
+          });
           if (results.dataValues) {
             return responseStandart(res, "success sender message", {});
           } else {
@@ -206,7 +214,8 @@ module.exports = {
             {
               count: count,
               pages: Math.ceil(count / limit),
-              limit: parseInt(limit),
+              currentPage: page,
+              dataPerPage: parseInt(limit),
               nextLink:
                 page <= Math.ceil(count / limit)
                   ? process.env.APP_URL +
@@ -216,7 +225,7 @@ module.exports = {
                     })}`
                   : null,
               prevLink:
-                page > Math.ceil(count / limit)
+                page > 1
                   ? process.env.APP_URL +
                     `message/list/?${qs.stringify({
                       ...req.query,
@@ -236,7 +245,8 @@ module.exports = {
               {
                 count: count,
                 pages: Math.ceil(count / limit),
-                limit: parseInt(limit),
+                currentPage: page,
+                dataPerPage: parseInt(limit),
                 nextLink:
                   page <= Math.ceil(count / limit)
                     ? process.env.APP_URL +
@@ -246,7 +256,7 @@ module.exports = {
                       })}`
                     : null,
                 prevLink:
-                  page > Math.ceil(count / limit)
+                  page > 1
                     ? process.env.APP_URL +
                       `message/list/?${qs.stringify({
                         ...req.query,
@@ -326,7 +336,8 @@ module.exports = {
             {
               count: count,
               pages: Math.ceil(count / limit),
-              limit: parseInt(limit),
+              currentPage: page,
+              dataPerPage: parseInt(limit),
               nextLink:
                 page <= Math.ceil(count / limit)
                   ? process.env.APP_URL +
@@ -336,7 +347,7 @@ module.exports = {
                     })}`
                   : null,
               prevLink:
-                page > Math.ceil(count / limit)
+                page > 1
                   ? process.env.APP_URL +
                     `message/?${qs.stringify({
                       ...req.query,
@@ -356,7 +367,8 @@ module.exports = {
               {
                 count: count,
                 pages: Math.ceil(count / limit),
-                limit: parseInt(limit),
+                currentPage: page,
+                dataPerPage: parseInt(limit),
                 nextLink:
                   page <= Math.ceil(count / limit)
                     ? process.env.APP_URL +
@@ -366,7 +378,7 @@ module.exports = {
                       })}`
                     : null,
                 prevLink:
-                  page > Math.ceil(count / limit)
+                  page > 1
                     ? process.env.APP_URL +
                       `message/?${qs.stringify({
                         ...req.query,

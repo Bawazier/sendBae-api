@@ -8,8 +8,7 @@ const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {});
-const socket = require("./src/helpers/socket");
-socket.io = io;
+module.exports = io;
 const { APP_PORT } = process.env;
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,6 +20,11 @@ app.get("/", (req, res) => {
     success: true,
     message: "Backend is running well",
   });
+});
+
+// REALTIME
+io.on("connection", socket => {
+  console.log(`App connect: ${socket}`);
 });
 
 server.listen(APP_PORT, () => {

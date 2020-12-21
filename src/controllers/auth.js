@@ -20,7 +20,7 @@ module.exports = {
         jwt.sign(
           { id: validate[0].id },
           process.env.APP_KEY,
-          { expiresIn: "15m" },
+          { expiresIn: "5m" },
           function (err, token) {
             if (!err) {
               return responseStandart(res, "Signin Success", {
